@@ -32,14 +32,19 @@ function findSynonyms(words, searchTerm) {
     ),
   ];
 
+  console.log("All direct synonyms", allDirectSynonyms);
+
   // 5. Get all related synonyms - Implement transitive rule
   const result = [
     ...new Set(
       words
         ?.filter((el) => {
-          if (allDirectSynonyms.includes(el.word.toLowerCase())) {
+          /* Find el that contains allDirectSynonyms as a word/name or in the synonyms arr */
+          if (
+            allDirectSynonyms.includes(el.word) ||
+            el.synonyms.some((el) => allDirectSynonyms.includes(el))
+          )
             return el;
-          }
         })
         .map((el) => {
           return [
@@ -49,7 +54,7 @@ function findSynonyms(words, searchTerm) {
         })
         .flat()
     ),
-  ].filter((el) => el !== searchTerm.toLowerCase()); // remove the searching word itself
+  ].filter((el) => el !== searchTerm.toLowerCase());
 
   return {
     word: searchTerm,
